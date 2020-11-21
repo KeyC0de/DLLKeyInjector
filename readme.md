@@ -35,6 +35,13 @@ The discovery of memory addresses of certain API functions, such as `LoadLibrary
 7. Free the target process's memory allocated for the needs of the dll
 
 
+*Example:*</br>
+
+<p style="text-align: center;">
+	<img src="_present/example_injection.jpg" />
+</p>
+
+
 # Contribute
 
 Please submit any bugs you find through GitHub repository 'Issues' page with details describing how to replicate the problem. If you liked it or you learned something new give it a star, clone it, laugh at it, contribute to it whatever. I appreciate all of it. Enjoy.
