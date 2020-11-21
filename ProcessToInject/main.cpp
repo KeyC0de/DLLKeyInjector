@@ -1,8 +1,6 @@
 #include <Windows.h>
 #include <iostream>
 
-// we will inject the dll to this process, to test for proper functionality
-
 int main()
 {
 	MessageBoxW( nullptr,
@@ -18,4 +16,3 @@ int main()
 
 	return 0;
 }
-
