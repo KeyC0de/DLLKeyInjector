@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <iostream>
 
+
 int main()
 {
 	MessageBoxW( nullptr,
@@ -10,7 +11,7 @@ int main()
 
 	while( true )
 	{
-		std::wcout << L"Echo" << std::endl;
+		std::cout << "Echo" << std::endl;
 		Sleep( 3000 );
 	}
 
