@@ -4,15 +4,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllInjector", "DllInjector\DllInjector.vcxproj", "{D1DE1D47-C4B0-4884-BAD0-74661ED2BC31}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FFA864E8-0266-4B38-B588-922B4E4A021C} = {FFA864E8-0266-4B38-B588-922B4E4A021C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dllToInject", "dllToInject\dllToInject.vcxproj", "{FFA864E8-0266-4B38-B588-922B4E4A021C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProcessToInject", "ProcessToInject\ProcessToInject.vcxproj", "{338A50A1-60CE-4AD5-AE20-42282D14270D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D1DE1D47-C4B0-4884-BAD0-74661ED2BC31} = {D1DE1D47-C4B0-4884-BAD0-74661ED2BC31}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProcessToInject", "ProcessToInject\ProcessToInject.vcxproj", "{338A50A1-60CE-4AD5-AE20-42282D14270D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FFA864E8-0266-4B38-B588-922B4E4A021C} = {FFA864E8-0266-4B38-B588-922B4E4A021C}
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{376C1D93-D98C-45D4-9354-9AA5AD8749DB}"
+	ProjectSection(SolutionItems) = preProject
+		winner.h = winner.h
 	EndProjectSection
 EndProject
 Global

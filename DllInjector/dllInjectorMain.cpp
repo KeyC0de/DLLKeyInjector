@@ -1,15 +1,15 @@
 #include <iostream>
-#include <Windows.h>
+#include "..\winner.h"
 
 
 int main()
 {
-	// 1.  Get pid of target process. `GetWindowThreadProcessId`
+	// 1.
 	DWORD pid;
-	std::cout << "Enter process id \n";
+	std::cout << "Enter process identification number (haha): ";
 	std::cin >> pid;
 	
-	// 2. Get process handle with appropriate permissions. `OpenProcess`
+	// 2.
 	HANDLE hProc = OpenProcess( PROCESS_ALL_ACCESS,
 		0,
 		pid );
@@ -17,64 +17,63 @@ int main()
 		|| hProc == "ERROR_INVALID_PARAMETER"
 		|| hProc == "ERROR_ACCESS_DENIED")
 	{
-		std::cout << "Invalid process handle."
-			<< __LINE__
-			<< __FILE__
+		std::cout << "Invalid process handle.\n"
+			<< GetLastError()
 			<< '\n';
-		std::cout << GetLastError()
-			<< '\n';
-		exit( EXIT_FAILURE );
+		exit( -1 );
 	}
 
-	// 3. Allocate memory inside the process. `VirtualAllocEx`
-	LPCSTR dllPath = R"(C:\Users\Nikos\Documents\Visual_Studio_Projects\DllInjector\x64\Debug\dllToInject.dll)";
-	LPVOID pDllPathBase = VirtualAllocEx( hProc,
+	// 3.
+#if defined _DEBUG && !defined NDEBUG
+	LPCSTR dllPath = R"(..\x64\Debug\dllToInject.dll)";
+#else
+	LPCSTR dllPath = R"(..\x64\Release\dllToInject.dll)";
+#endif
+	LPVOID pDllBase = VirtualAllocEx( hProc,
 		nullptr, 
-		strlen( dllPath ) + 1, // + null terminator
+		strlen( dllPath ) + 1, // +1B for null terminator storage
 		MEM_COMMIT,
 		PAGE_READWRITE );
 
-	// 4. Copy dll into that memory. `WriteProcessMemory`
-	SIZE_T cBytesWritten;
+	// 4.
+	SIZE_T cbytesWritten;
 	WriteProcessMemory( hProc,
-		pDllPathBase,
+		pDllBase,
 		(LPVOID)dllPath,
 		strlen( dllPath ) + 1,
-		&cBytesWritten );
-	std::cout << cBytesWritten
+		&cbytesWritten );
+	std::cout << cbytesWritten
 		<< " bytes written.\n";
 
-	// 5. Create a remote thread to host the dll. `CreateRemoteThread`
-	//	- Get address of "LoadLibraryA|W" function to place the dll. `GetProcAddress`
-	//	- calling `CreateRemoteThread` on target process instructs it to execute the dll.
-	//		This entails a call to `LoadLibraryA|W` in the target process, with the thread
-	//		parameter being the memory address you've allocated which points to the dll base.
-	int tid = 0;
+	// 5.
+	DWORD tid = 0;
 	HANDLE hLoaderThread = CreateRemoteThread( hProc,
 		nullptr,
 		0, 
 		(LPTHREAD_START_ROUTINE)GetProcAddress( GetModuleHandleW( L"Kernel32.dll" ),
 			"LoadLibraryA" ),
-		pDllPathBase,
-		/* func parameter -> LoadLibrary(pDllPathBase) */ 0u,
-		(LPDWORD)tid );
+		pDllBase,
+		0u,
+		(LPDWORD)&tid );
 
 	std::cout << "Dll allocated @: "
-		<< pDllPathBase
-		<< " into the target program.\n";
-	std::cout << "Injected Thread id: "
-		<< tid << "\n";
+		<< pDllBase
+		<< " into the target process.\n";
+	std::cout << "Thread id: "
+		<< tid
+		<< "\n";
 	std::cin.get();
 
-	// 6. `WaitForSingleObject` until the thread is finished executing.
+	// 6.
 	WaitForSingleObject( hLoaderThread,
 		INFINITE );
 
-	// 7. Free the target process's memory allocated for the needs of the dll
+	// 7.
 	VirtualFreeEx( hProc,
-		pDllPathBase,
+		pDllBase,
 		strlen( dllPath ) + 1,
 		MEM_RELEASE );
 
-	return 0;
+	std::system( "pause" );
+	return EXIT_SUCCESS;
 }

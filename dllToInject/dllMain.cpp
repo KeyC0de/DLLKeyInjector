@@ -1,17 +1,26 @@
-#include <Windows.h>
+#include "..\winner.h"
 
 
-// dll entry point
-BOOL APIENTRY DllMain( HMODULE hModule,
-	DWORD ulReasonForCall,
-	LPVOID lpReserved )
+int WINAPI DllMain( HINSTANCE hInst,
+	DWORD ulReasonForcall,
+	LPVOID pReserved )
 {
-	if ( ulReasonForCall == DLL_PROCESS_ATTACH || ulReasonForCall == DLL_THREAD_ATTACH )
+	switch ( ulReasonForcall )
 	{
+	case DLL_PROCESS_ATTACH:
+	case DLL_THREAD_ATTACH:
 		MessageBoxW( nullptr,
 			L"Hello from dllToInject!",
 			L"Hello",
 			MB_ICONINFORMATION );
+		break;
+	case DLL_PROCESS_DETACH:
+		break;
+	case DLL_THREAD_DETACH:
+		// Do thread-specific cleanup.
+		break;
+	default:
+		break;
 	}
 	return TRUE;
 }

@@ -1,19 +1,23 @@
-#include <Windows.h>
 #include <iostream>
+#include "..\winner.h"
 
 
 int main()
 {
-	MessageBoxW( nullptr,
-		L"You're gonna love it",
-		L"Love it",
-		0u );
-
-	while( true )
+	std::cout << "pid = "
+		<< GetProcessId( GetCurrentProcess() )
+		<< '\n';
+	while( !( GetAsyncKeyState( VK_F10 ) & 0x01 ) )
 	{
-		std::cout << "Echo" << std::endl;
-		Sleep( 3000 );
+		std::cout << "echo";
+		Sleep( 1000u );
+		std::cout << '.';
+		Sleep( 1000u );
+		std::cout << '.';
+		Sleep( 1000u );
+		std::cout << ".\n";
 	}
 
-	return 0;
+	std::system( "pause" );
+	return EXIT_SUCCESS;
 }
