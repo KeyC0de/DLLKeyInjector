@@ -6,15 +6,14 @@ int main()
 {
 	// 1.
 	DWORD pid;
-	std::cout << "Enter process identification number (haha): ";
+	std::cout << "Enter process identification number: ";
 	std::cin >> pid;
 	
 	// 2.
 	HANDLE hProc = OpenProcess( PROCESS_ALL_ACCESS,
 		0,
 		pid );
-	if ( hProc == nullptr
-		|| hProc == "ERROR_INVALID_PARAMETER"
+	if ( hProc == nullptr || hProc == "ERROR_INVALID_PARAMETER"
 		|| hProc == "ERROR_ACCESS_DENIED")
 	{
 		std::cout << "Invalid process handle.\n"
